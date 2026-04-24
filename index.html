@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#ff8f39">
+  <title>FuelMap v3.7.3</title>
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="FuelMap">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="hero card">
+      <div class="hero-left">
+        <div class="hero-title-row">
+          <img src="logo-fuelmap.svg" alt="FuelMap" class="app-logo">
+          <div class="hero-branding">
+            <h1>FuelMap</h1>
+            <p class="hero-brand-tag">Encuentra el mejor repostaje cerca de ti</p>
+          </div>
+          <span class="hero-pill">⛽ v3.7.3</span>
+          <button id="helpBtn" class="ghost-pill" type="button">Ayuda</button>
+        </div>
+        <p class="hero-subtitle">Compara precios reales, calcula trayecto y repostaje completo, y elige el mejor origen entre ubicación actual, coordenadas o dirección/CP.</p>
+      </div>
+    </header>
+
+    <section class="top-grid">
+      <article class="card panel origin-panel mobile-collapsible-card">
+        <details class="mobile-collapse" open>
+          <summary class="mobile-collapse-summary section-head">
+            <h2>Origen</h2>
+            <div id="originModeBadge" class="mode-badge">Activo: Coordenadas</div>
+          </summary>
+          <div class="mobile-collapse-body">
+            <div class="origin-block origin-geoblock" id="coordsBlock">
+              <div class="origin-block-head">
+                <div class="origin-block-title">Coordenadas manuales</div>
+                <button id="geoBtn" class="btn btn-secondary geo-inline-btn geo-icon-btn" type="button" aria-label="Usar mi ubicación" title="Usar mi ubicación"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s6-5.2 6-11a6 6 0 1 0-12 0c0 5.8 6 11 6 11Z"></path><circle cx="12" cy="10" r="2.5"></circle></svg></button>
+              </div>
+              <div class="field-grid two">
+                <label class="field">
+                  <span>Latitud</span>
+                  <input id="latitudeInput" type="number" step="any" value="40.474405">
+                </label>
+                <label class="field">
+                  <span>Longitud</span>
+                  <input id="longitudeInput" type="number" step="any" value="-3.654314">
+                </label>
+              </div>
+            </div>
+
+            <div class="origin-block" id="addressBlock">
+              <div class="origin-block-title">Dirección</div>
+              <label class="field">
+                <span>Calle, barrio, municipio o código postal</span>
+                <div class="input-with-icon-end">
+                  <input id="addressInput" type="text" placeholder="Ej.: Arturo Soria 175, Hortaleza, Alcobendas, 28033...">
+                  <button id="clearOriginBtn" class="icon-end-btn" type="button" aria-label="Limpiar dirección" title="Limpiar dirección"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+                </div>
+              </label>
+              <p class="hint origin-inline-hint">Puedes escribir una dirección completa o solo un código postal. Si se detecta correctamente, se normalizará automáticamente.</p>
+            </div>
+          </div>
+        </details>
+      </article>
+
+      <article class="card panel mobile-collapsible-card">
+        <details class="mobile-collapse" open>
+          <summary class="mobile-collapse-summary"><h2>Tu coche</h2><span class="mobile-collapse-pill">Minimizar</span></summary>
+          <div class="mobile-collapse-body">
+        <div class="field-grid two">
+          <label class="field">
+            <span>Consumo medio</span>
+            <div class="input-with-suffix">
+              <input id="consumptionInput" type="number" min="0" step="0.1" value="7.5">
+              <em>L/100 km</em>
+            </div>
+          </label>
+          <label class="field">
+            <span>Tipo de trayecto</span>
+            <select id="tripTypeInput">
+              <option value="oneway">Solo ida</option>
+              <option value="roundtrip" selected>Ida y vuelta</option>
+            </select>
+          </label>
+        </div>
+        <div class="field-grid two">
+          <label class="field">
+            <span>Combustible a comparar</span>
+            <select id="fuelTypeInput">
+              <option value="Precio_x0020_Gasoleo_x0020_A" selected>Gasóleo A</option>
+              <option value="Precio_x0020_Gasoleo_x0020_Premium">Gasóleo Premium</option>
+              <option value="Precio_x0020_Diésel_x0020_Renovable">Diésel renovable</option>
+              <option value="Precio_x0020_Gasolina_x0020_95_x0020_E5">Gasolina 95 E5</option>
+              <option value="Precio_x0020_Gasolina_x0020_95_x0020_E10">Gasolina 95 E10</option>
+              <option value="Precio_x0020_Gasolina_x0020_98_x0020_E5">Gasolina 98 E5</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Capacidad del depósito</span>
+            <div class="input-with-suffix">
+              <input id="tankCapacityInput" type="number" min="0" step="0.1" value="55">
+              <em>L</em>
+            </div>
+          </label>
+        </div>
+          </div>
+        </details>
+      </article>
+
+      <article class="card panel mobile-collapsible-card">
+        <details class="mobile-collapse" open>
+          <summary class="mobile-collapse-summary"><h2>Filtros</h2><span class="mobile-collapse-pill">Minimizar</span></summary>
+          <div class="mobile-collapse-body">
+        <div class="field-grid two">
+          <label class="field">
+            <span>Límite máximo</span>
+            <select id="limitInput">
+              <option value="10">10</option>
+              <option value="20" selected>20</option>
+              <option value="30">30</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Ordenar resultados por</span>
+            <select id="sortByInput">
+              <option value="visitTotal" selected>Coste total visita</option>
+              <option value="price">Precio en surtidor</option>
+              <option value="tripCost">Coste del trayecto</option>
+              <option value="distance">Distancia</option>
+              <option value="fullRefill">Repostaje completo</option>
+            </select>
+          </label>
+        </div>
+        <div class="field-grid two">
+          <label class="field">
+            <span>Radio máximo</span>
+            <select id="maxDistanceInput">
+              <option value="5">5 km</option>
+              <option value="8">8 km</option>
+              <option value="12">12 km</option>
+              <option value="20">20 km</option>
+              <option value="35">35 km</option>
+              <option value="50" selected>50 km</option>
+              <option value="100">100 km</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Favoritos</span>
+            <select id="favoriteModeInput">
+              <option value="optimal" selected>Resultados óptimos</option>
+              <option value="blend">Resultados óptimos + favoritos</option>
+              <option value="only">Solo favoritos</option>
+            </select>
+          </label>
+        </div>
+        <div class="field-grid two">
+          <label class="field">
+            <span>Filtrar resultados por texto</span>
+            <input id="resultSearchInput" type="text" placeholder="Ej.: hortaleza, repsol, alcobendas...">
+          </label>
+          <label class="field">
+            <span>Solo precios válidos</span>
+            <label class="switch-pill switch-pill-block switch-pill-simple">
+              <input id="showOnlyPricedInput" type="checkbox" checked>
+              <span>Activado</span>
+            </label>
+          </label>
+        </div>
+          </div>
+        </details>
+      </article>
+    </section>
+
+    <section class="card brands-card panel mobile-collapsible-card">
+      <details class="mobile-collapse" open>
+        <summary class="mobile-collapse-summary">
+          <h2>Marcas</h2><span class="mobile-collapse-pill">Minimizar</span>
+        </summary>
+        <div class="mobile-collapse-body">
+      <div class="section-head inside-collapse-head">
+        <div></div>
+        <div class="inline-actions tight">
+          <button id="selectAllBrandsBtn" class="btn btn-tertiary" type="button">Todas</button>
+          <button id="clearBrandsBtn" class="btn btn-tertiary" type="button">Ninguna</button>
+          <button id="recommendedBrandsBtn" class="btn btn-tertiary" type="button">Típicas</button>
+        </div>
+      </div>
+      <div id="brandChips" class="brand-chips"></div>
+      <div class="field-grid one brand-extra">
+        <label class="field">
+          <span>Marca adicional opcional</span>
+          <input id="customBrandInput" type="text" placeholder="Ej.: BALLENOIL, GALP, EROSKI, AVIA...">
+        </label>
+      </div>
+      <p class="hint">Puedes combinar varias marcas y guardar favoritos en este navegador.</p>
+        </div>
+      </details>
+    </section>
+
+    <section class="card panel collapsible-card">
+      <details class="collapsible">
+        <summary class="collapsible-summary">
+          <div>
+            <h2>Estado y fuente</h2>
+            <p class="hint collapse-hint">Resumen del dataset, estado actual y origen de los datos.</p>
+          </div>
+          <span class="collapse-pill">Minimizar</span>
+        </summary>
+        <div class="collapsible-body">
+          <section class="status-grid grouped-status-grid">
+            <article class="status-panel grouped-panel">
+              <h3>Estado</h3>
+              <p id="statusText">Listo para consultar. Puedes definir tu origen y actualizar las estaciones.</p>
+            </article>
+            <article class="stats-card">
+              <div class="stat-box">
+                <span>Estaciones</span>
+                <strong id="stationCount">0</strong>
+              </div>
+              <div class="stat-box">
+                <span>Más barata</span>
+                <strong id="minPumpPrice">—</strong>
+              </div>
+              <div class="stat-box">
+                <span>Favoritos visibles</span>
+                <strong id="favoriteCount">0</strong>
+              </div>
+              <div class="stat-box">
+                <span>Dataset</span>
+                <strong id="datasetDate">—</strong>
+              </div>
+            </article>
+          </section>
+
+          <section class="source-card grouped-panel">
+            <div class="source-grid">
+              <div>
+                <div class="source-label">Fuente</div>
+                <div id="sourceText" class="source-value">—</div>
+              </div>
+              <div>
+                <div class="source-label">Respuesta recibida</div>
+                <div id="fetchedAtText" class="source-value">—</div>
+              </div>
+              <div>
+                <div class="source-label">Filas del dataset</div>
+                <div id="rowCountText" class="source-value">—</div>
+              </div>
+              <div>
+                <div class="source-label">Marcas activas</div>
+                <div id="activeBrandsText" class="source-value">REPSOL</div>
+              </div>
+            </div>
+
+            <div class="data-source-tools">
+              <div class="field-grid one">
+                <label class="field">
+                  <span>Origen de datos / URL del endpoint</span>
+                  <input id="dataUrlInput" type="text" value="https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/">
+                </label>
+              </div>
+              <div class="inline-actions source-actions">
+                <button id="loadBtn" class="btn btn-primary" type="button">Actualizar estaciones</button>
+                <button id="restoreMineturBtn" class="btn btn-tertiary" type="button">Datos del Ministerio</button>
+                <button id="processJsonBtn" class="btn btn-secondary" type="button">Procesar JSON pegado</button>
+                <label class="btn btn-tertiary file-btn" for="jsonFileInput">Cargar JSON</label>
+                <input id="jsonFileInput" type="file" accept="application/json,.json" hidden>
+                <button id="clearJsonBtn" class="btn btn-tertiary" type="button">Limpiar JSON</button>
+              </div>
+              <label class="field">
+                <span>Pegar JSON manualmente</span>
+                <textarea id="manualJsonInput" rows="6" placeholder="Pega aquí un JSON completo con ListaEESSPrecio..."></textarea>
+              </label>
+            </div>
+          </section>
+        </div>
+      </details>
+    </section>
+
+
+    <section class="card best-card panel" id="bestCard">
+      <div class="best-label">MEJOR OPCIÓN</div>
+      <div class="best-title">Todavía no hay resultados</div>
+      <div class="best-body">Pulsa “Actualizar estaciones” para probar la lectura directa del endpoint.</div>
+    </section>
+
+    <section class="card panel">
+      <div class="section-head results-head">
+        <h2>Resultados</h2>
+        <div class="inline-actions tight">
+          <button id="refreshFiltersBtn" class="btn btn-tertiary" type="button">Aplicar filtros</button>
+          <button id="clearFavoritesBtn" class="btn btn-tertiary" type="button">Vaciar favoritos</button>
+          <button id="exportBtn" class="btn btn-tertiary" type="button">Exportar CSV</button>
+        </div>
+      </div>
+      <div id="cardsContainer" class="cards-container empty-state">No hay estaciones cargadas todavía.</div>
+    </section>
+  </div>
+
+  <dialog id="helpDialog" class="help-dialog">
+    <div class="help-card">
+      <h3>Cómo funciona FuelMap v3.7.3</h3>
+      <ul>
+        <li>Lee directamente el endpoint oficial o un JSON que pegues/cargues.</li>
+        <li>Puedes definir tu origen por ubicación, coordenadas o dirección/CP.</li>
+        <li>Calcula coste de trayecto, repostaje completo y coste total de la visita.</li>
+        <li>Guarda favoritos, filtros, origen y la última fuente/dataset en el navegador.</li>
+        <li>Incluye enlaces directos a Google Maps, Waze y Apple Maps.</li>
+      </ul>
+      <p class="help-footer-note">App creada por Sucendo.</p>
+      <div class="inline-actions">
+        <button id="closeHelpBtn" class="btn btn-primary" type="button">Cerrar</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => navigator.serviceWorker.register("./service-worker.js").catch(() => {}));
+    }
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>
